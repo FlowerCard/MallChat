@@ -41,8 +41,18 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${mallchat.github.client-id}
+            client-secret: ${mallchat.github.client-secret}
 jwt:
   secret: ${mallchat.jwt.secret}
+  tokenHeader: ${mallchat.jwt.tokenHeader}
+  tokenHead: ${mallchat.jwt.tokenHead}
+  expiration: ${mallchat.jwt.expiration}
 wx:
   mp:
     #    callback: http://f4cd-113-92-129-127.ngrok.io

@@ -26,8 +26,26 @@ public class JwtUtils {
     /**
      * token秘钥，请勿泄露，请勿随便修改
      */
-    @Value("${mallchat.jwt.secret}")
+    @Value("${jwt.secret}")
     private String secret;
+
+    /**
+     * token请求头
+     */
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+
+    /**
+     * token前缀
+     */
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+
+    /**
+     * token过期时间
+     */
+    @Value("${jwt.expiration}")
+    private String expiration;
 
     private static final String UID_CLAIM = "uid";
     private static final String CREATE_TIME = "createTime";
