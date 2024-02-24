@@ -1,14 +1,16 @@
 package com.abin.mallchat.common.common.exception;
 
-import cn.hutool.http.ContentType;
-import cn.hutool.json.JSONUtil;
-import com.abin.mallchat.common.common.domain.vo.response.ApiResult;
-import com.google.common.base.Charsets;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import com.abin.mallchat.common.common.domain.vo.response.ApiResult;
+import com.google.common.base.Charsets;
+
+import cn.hutool.http.ContentType;
+import cn.hutool.json.JSONUtil;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Description: 业务校验异常码
@@ -19,6 +21,7 @@ import java.io.IOException;
 @Getter
 public enum HttpErrorEnum implements ErrorEnum {
     ACCESS_DENIED(401, "登录失效，请重新登录"),
+    FORBIDDEN(403, "无权访问"),
     ;
     private Integer httpCode;
     private String msg;
