@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum LoginTypeEnums {
+public enum ClientTypeEnum {
 
     /**
      * 用户名密码登录 todo flowercard doing
@@ -63,8 +63,8 @@ public enum LoginTypeEnums {
      * @param type 类型
      * @return 枚举
      */
-    public static LoginTypeEnums of(String type) {
-        for (LoginTypeEnums value : values()) {
+    public static ClientTypeEnum of(String type) {
+        for (ClientTypeEnum value : values()) {
             if (value.getType().equals(type)) {
                 return value;
             }
