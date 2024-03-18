@@ -1,17 +1,24 @@
 package com.abin.mallchat.common.user.controller;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
+import com.abin.mallchat.common.common.constant.RedisKey;
 import com.abin.mallchat.common.common.domain.dto.GitHubLoginAuthorizeDTO;
 import com.abin.mallchat.common.common.domain.properties.GitHubAuthProperties;
 import com.abin.mallchat.common.common.domain.vo.response.ApiResult;
-import com.abin.mallchat.common.common.domain.vo.response.GitHubLoginAccessTokenParamResp;
+import com.abin.mallchat.common.common.exception.HttpErrorEnum;
+import com.abin.mallchat.common.user.domain.dto.GitHubUserDTO;
+import com.abin.mallchat.common.user.service.GitHubService;
 import com.abin.mallchat.utils.JsonUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author HuaPai
@@ -27,44 +34,48 @@ public class GitHubController {
     @Resource
     private GitHubAuthProperties gitHubAuthProperties;
 
+    @Resource
+    private GitHubService gitHubService;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
     /**
      * 获取GitHub授权登录地址
      */
     @SneakyThrows
     @GetMapping("/authorize")
-    public void getGitHubAuthorizeUrl(HttpServletResponse response) {
+    public String getGitHubAuthorizeUrl() {
         String authorizeUrl = gitHubAuthProperties.getAuthorizeUrl();
         String redirectUrl = authorizeUrl.concat("?client_id=").concat(gitHubAuthProperties.getClientId())
                 .concat("&state=").concat(UUID.fastUUID().toString().replace("-", "")).toString();
         log.info("redirectUrl -> {}", redirectUrl);
-        response.sendRedirect(redirectUrl);
-    }
-
-    /**
-     * 获取GitHub AccessToken URL
-     * @param authorizeDTO github 授权响应内容
-     * @return accessToken Url
-     */
-    @PostMapping("/accessToken")
-    public ApiResult<GitHubLoginAccessTokenParamResp> githubAccessToken(@RequestBody GitHubLoginAuthorizeDTO authorizeDTO) {
-        String accessTokenUrl = gitHubAuthProperties.getAccessTokenUrl();
-        GitHubLoginAccessTokenParamResp paramResp = GitHubLoginAccessTokenParamResp.builder()
-                .accessTokenUrl(accessTokenUrl)
-                .code(authorizeDTO.getCode())
-                .client_id(gitHubAuthProperties.getClientId())
-                .client_secret(gitHubAuthProperties.getClientSecret()).build();
-        return ApiResult.success(paramResp);
+        return redirectUrl;
     }
 
     /**
      * GitHub授权登录回调
      * @param authorizeDTO 授权DTO
      */
-    @SneakyThrows
     @RequestMapping("/callBack")
-    public ApiResult<GitHubLoginAuthorizeDTO> accessGithubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
+    public ApiResult<String> accessGithubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
         log.info("authorizeDTO -> {}", JsonUtils.toStr(authorizeDTO));
-        return ApiResult.success(authorizeDTO);
+        return ApiResult.success(gitHubService.githubLogin(authorizeDTO));
+    }
+
+    /**
+     * 获取GitHub授权用户信息
+     *
+     * @return GitHub授权用户信息
+     */
+    @GetMapping("/getAccessUser")
+    public ApiResult<GitHubUserDTO> getAccessUser(@RequestParam("code") String code) {
+        String githubLoginInfo = stringRedisTemplate.opsForValue().get(RedisKey.getKey(RedisKey.GITHUB_LOGIN_INFO, code));
+        if (StrUtil.isBlank(githubLoginInfo)) {
+            return ApiResult.fail(HttpErrorEnum.FORBIDDEN);
+        }
+        return ApiResult.success(JsonUtils.toObj(githubLoginInfo, GitHubUserDTO.class));
+
     }
 
 }

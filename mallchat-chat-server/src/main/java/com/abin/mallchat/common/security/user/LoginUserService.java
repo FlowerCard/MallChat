@@ -37,6 +37,7 @@ public interface LoginUserService extends UserDetailsService {
      * @param username 用户名
      * @return 用户详情
      */
+    @Override
     UserDetailVo loadUserByUsername(String username) throws UsernameNotFoundException;
 
     /**

@@ -1,5 +1,6 @@
 package com.abin.mallchat.common.common.domain.vo.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class GitHubLoginAccessTokenParamResp {
     /**
      * GitHub OAuth App AuthorizeUrl
      */
+    @JsonIgnore
     private String accessTokenUrl;
 
     /**

@@ -74,6 +74,11 @@ public class RedisKey {
      */
     public static final String USER_GLM2_TIME_LAST = "userGLM2UseTime:uid_%d";
 
+    /**
+     * 用户的github登录信息
+     */
+    public static final String GITHUB_LOGIN_INFO = "githubLoginInfo:uid_%s";
+
     public static String getKey(String key, Object... objects) {
         return BASE_KEY + String.format(key, objects);
     }

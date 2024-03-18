@@ -1,7 +1,6 @@
 package com.abin.mallchat.common.common.domain.properties;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -40,5 +39,10 @@ public class GitHubAuthProperties {
      * GitHub OAuth App AccessTokenUrl
      */
     private String accessTokenUrl;
+
+    /**
+     * GitHub OAuth App UserUrl
+     */
+    private String accessUserUrl;
 
 }
