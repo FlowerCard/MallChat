@@ -51,8 +51,8 @@ public class GitHubController {
         GitHubLoginAccessTokenParamResp paramResp = GitHubLoginAccessTokenParamResp.builder()
                 .accessTokenUrl(accessTokenUrl)
                 .code(authorizeDTO.getCode())
-                .clientId(gitHubAuthProperties.getClientId())
-                .clientSecret(gitHubAuthProperties.getClientSecret()).build();
+                .client_id(gitHubAuthProperties.getClientId())
+                .client_secret(gitHubAuthProperties.getClientSecret()).build();
         return ApiResult.success(paramResp);
     }
 
@@ -62,7 +62,7 @@ public class GitHubController {
      */
     @SneakyThrows
     @RequestMapping("/callBack")
-    public ApiResult<GitHubLoginAuthorizeDTO> AccessGithubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
+    public ApiResult<GitHubLoginAuthorizeDTO> accessGithubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
         log.info("authorizeDTO -> {}", JsonUtils.toStr(authorizeDTO));
         return ApiResult.success(authorizeDTO);
     }

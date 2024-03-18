@@ -25,12 +25,12 @@ public class GitHubLoginAccessTokenParamResp {
     /**
      * GitHub OAuth App ClientId
      */
-    private String clientId;
+    private String client_id;
 
     /**
      * GitHub OAuth App ClientSecret
      */
-    private String clientSecret;
+    private String client_secret;
 
     /**
      * 用于代码交换的证明密钥
