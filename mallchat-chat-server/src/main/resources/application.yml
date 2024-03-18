@@ -113,3 +113,4 @@ secure:
       - /favicon.ico
       - /actuator/**
       - /druid/**
+      - /**/public/**

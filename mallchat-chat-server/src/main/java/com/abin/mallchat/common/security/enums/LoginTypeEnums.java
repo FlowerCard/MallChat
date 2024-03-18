@@ -1,4 +1,4 @@
-package com.abin.mallchat.common.security;
+package com.abin.mallchat.common.security.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -56,5 +56,20 @@ public enum LoginTypeEnums {
     ;
     private final String type;
     private final String desc;
+
+    /**
+     * 根据类型获取枚举
+     *
+     * @param type 类型
+     * @return 枚举
+     */
+    public static LoginTypeEnums of(String type) {
+        for (LoginTypeEnums value : values()) {
+            if (value.getType().equals(type)) {
+                return value;
+            }
+        }
+        return null;
+    }
 
 }

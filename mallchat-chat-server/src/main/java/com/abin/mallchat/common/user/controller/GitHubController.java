@@ -1,7 +1,6 @@
 package com.abin.mallchat.common.user.controller;
 
 import cn.hutool.core.lang.UUID;
-import cn.hutool.http.HttpUtil;
 import com.abin.mallchat.common.common.domain.dto.GitHubLoginAuthorizeDTO;
 import com.abin.mallchat.common.common.domain.properties.GitHubAuthProperties;
 import com.abin.mallchat.common.common.domain.vo.response.ApiResult;
@@ -9,13 +8,10 @@ import com.abin.mallchat.common.common.domain.vo.response.GitHubLoginAccessToken
 import com.abin.mallchat.utils.JsonUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * @Author HuaPai
@@ -33,7 +29,6 @@ public class GitHubController {
 
     /**
      * 获取GitHub授权登录地址
-     * @return 返回GitHub授权登录地址
      */
     @SneakyThrows
     @GetMapping("/authorize")
