@@ -12,9 +12,9 @@ import com.abin.mallchat.common.user.domain.dto.GitHubUserDTO;
 import com.abin.mallchat.common.user.service.GitHubService;
 import com.abin.mallchat.common.user.service.UserService;
 import com.abin.mallchat.utils.JsonUtils;
+import com.abin.mallchat.utils.RedisUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +34,6 @@ public class GitHubServiceImpl implements GitHubService {
 
     private final GitHubAuthProperties gitHubAuthProperties;
 
-    private final StringRedisTemplate stringRedisTemplate;
 
     @Override
     public String githubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
@@ -71,8 +70,7 @@ public class GitHubServiceImpl implements GitHubService {
 
         // 放入缓存
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        stringRedisTemplate.opsForValue()
-                .set(RedisKey.getKey(RedisKey.GITHUB_LOGIN_INFO, uuid),
+        RedisUtils.set(RedisKey.getKey(RedisKey.GITHUB_LOGIN_INFO, uuid),
                         JsonUtils.toStr(hubUserDTO),
                         30L,
                         TimeUnit.MINUTES);
