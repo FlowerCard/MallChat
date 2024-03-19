@@ -18,6 +18,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @Author HuaPai
  * @Email flowercard591@gmail.com
@@ -69,7 +71,11 @@ public class GitHubServiceImpl implements GitHubService {
 
         // 放入缓存
         String uuid = UUID.randomUUID().toString().replace("-", "");
-        stringRedisTemplate.opsForValue().set(RedisKey.getKey(RedisKey.GITHUB_LOGIN_INFO, uuid), JsonUtils.toStr(hubUserDTO));
+        stringRedisTemplate.opsForValue()
+                .set(RedisKey.getKey(RedisKey.GITHUB_LOGIN_INFO, uuid),
+                        JsonUtils.toStr(hubUserDTO),
+                        30L,
+                        TimeUnit.MINUTES);
         return uuid;
     }
 
