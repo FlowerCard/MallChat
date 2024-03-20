@@ -1,18 +1,13 @@
 package com.abin.mallchat.common.user.controller;
 
 import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.StrUtil;
-import com.abin.mallchat.common.common.constant.RedisKey;
 import com.abin.mallchat.common.common.domain.dto.GitHubLoginAuthorizeDTO;
 import com.abin.mallchat.common.common.domain.properties.GitHubAuthProperties;
 import com.abin.mallchat.common.common.domain.vo.response.ApiResult;
-import com.abin.mallchat.common.common.exception.HttpErrorEnum;
-import com.abin.mallchat.common.user.domain.dto.GitHubUserDTO;
 import com.abin.mallchat.common.user.service.GitHubService;
 import com.abin.mallchat.utils.JsonUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,9 +32,6 @@ public class GitHubController {
     @Resource
     private GitHubService gitHubService;
 
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
-
     /**
      * 获取GitHub授权登录地址
      */
@@ -56,26 +48,22 @@ public class GitHubController {
     /**
      * GitHub授权登录回调
      * @param authorizeDTO 授权DTO
+     * @return 结果code
      */
     @RequestMapping("/callBack")
     public ApiResult<String> accessGithubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
         log.info("authorizeDTO -> {}", JsonUtils.toStr(authorizeDTO));
-        return ApiResult.success(gitHubService.githubLogin(authorizeDTO));
+        return ApiResult.success(gitHubService.githubLoginInfo(authorizeDTO));
     }
 
     /**
-     * 获取GitHub授权用户信息
+     * 通过GitHub登录
      *
-     * @return GitHub授权用户信息
+     * @return token
      */
-    @GetMapping("/getAccessUser")
-    public ApiResult<GitHubUserDTO> getAccessUser(@RequestParam("code") String code) {
-        String githubLoginInfo = stringRedisTemplate.opsForValue().get(RedisKey.getKey(RedisKey.GITHUB_LOGIN_INFO, code));
-        if (StrUtil.isBlank(githubLoginInfo)) {
-            return ApiResult.fail(HttpErrorEnum.FORBIDDEN);
-        }
-        return ApiResult.success(JsonUtils.toObj(githubLoginInfo, GitHubUserDTO.class));
-
+    @GetMapping("/loginWithGitHub")
+    public ApiResult<String> loginWithGitHub(@RequestParam("code") String code) {
+        return ApiResult.success(gitHubService.loginWithGitHub(code));
     }
 
 }

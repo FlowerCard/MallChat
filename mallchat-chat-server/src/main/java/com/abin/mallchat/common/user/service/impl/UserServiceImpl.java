@@ -1,10 +1,10 @@
 package com.abin.mallchat.common.user.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.abin.mallchat.common.common.algorithm.sensitiveWord.SensitiveWordBs;
 import com.abin.mallchat.common.common.event.UserBlackEvent;
 import com.abin.mallchat.common.common.event.UserRegisterEvent;
 import com.abin.mallchat.common.common.utils.AssertUtil;
-import com.abin.mallchat.common.common.algorithm.sensitiveWord.SensitiveWordBs;
 import com.abin.mallchat.common.user.dao.BlackDao;
 import com.abin.mallchat.common.user.dao.ItemConfigDao;
 import com.abin.mallchat.common.user.dao.UserBackpackDao;
@@ -191,5 +191,11 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             log.error("duplicate black ip:{}", ip);
         }
+    }
+
+    @Override
+    public User getUserInfoByGitHubId(Long gitHubId) {
+        AssertUtil.isNotEmpty(gitHubId, "请输入有效的查询参数");
+        return userDao.getByGitHubId(gitHubId);
     }
 }

@@ -86,4 +86,13 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
         }, User::getLastOptTime);
     }
 
+    /**
+     * 通过GitHub ID获取用户信息
+     *
+     * @param gitHubId GitHub ID
+     * @return 用户信息
+     */
+    public User getByGitHubId(Long gitHubId) {
+        return this.lambdaQuery().eq(User::getGithubId, gitHubId).one();
+    }
 }

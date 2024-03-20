@@ -1,5 +1,6 @@
 package com.abin.mallchat.common.user.domain.entity;
 
+import com.abin.mallchat.common.user.domain.dto.GitHubUserDTO;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -77,6 +78,30 @@ public class User implements Serializable {
      */
     @TableField(value = "ip_info", typeHandler = JacksonTypeHandler.class)
     private IpInfo ipInfo;
+
+    /**
+     * github登录名
+     */
+    @TableField(value = "github_login_name")
+    private String githubLoginName;
+
+    /**
+     * github用户id
+     */
+    @TableField(value = "github_id")
+    private Long githubId;
+
+    /**
+     * github主页地址
+     */
+    @TableField(value = "github_html_url")
+    private Long githubHtmlUrl;
+
+    /**
+     * GitHub授权信息
+     */
+    @TableField(value = "github_login_info", typeHandler = JacksonTypeHandler.class)
+    private GitHubUserDTO githubLoginInfo;
 
     /**
      * 佩戴的徽章id

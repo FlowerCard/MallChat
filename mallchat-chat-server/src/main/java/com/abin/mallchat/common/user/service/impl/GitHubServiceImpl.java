@@ -7,9 +7,12 @@ import com.abin.mallchat.common.common.domain.dto.GitHubLoginAuthorizeDTO;
 import com.abin.mallchat.common.common.domain.properties.GitHubAuthProperties;
 import com.abin.mallchat.common.common.domain.vo.response.GitHubLoginAccessTokenParamResp;
 import com.abin.mallchat.common.common.exception.BusinessException;
+import com.abin.mallchat.common.common.utils.AssertUtil;
 import com.abin.mallchat.common.user.domain.dto.GitHubAuthRespDTO;
 import com.abin.mallchat.common.user.domain.dto.GitHubUserDTO;
+import com.abin.mallchat.common.user.domain.entity.User;
 import com.abin.mallchat.common.user.service.GitHubService;
+import com.abin.mallchat.common.user.service.LoginService;
 import com.abin.mallchat.common.user.service.UserService;
 import com.abin.mallchat.utils.JsonUtils;
 import com.abin.mallchat.utils.RedisUtils;
@@ -32,11 +35,13 @@ public class GitHubServiceImpl implements GitHubService {
 
     private final UserService userService;
 
+    private final LoginService loginService;
+
     private final GitHubAuthProperties gitHubAuthProperties;
 
 
     @Override
-    public String githubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
+    public String githubLoginInfo(GitHubLoginAuthorizeDTO authorizeDTO) {
         log.info("GitHub授权回调成功 -> : {}", JsonUtils.toStr(authorizeDTO));
         // 拼接获取 GitHub 授权 token 参数
         GitHubLoginAccessTokenParamResp accessTokenParam = generateAuthTokenParam(authorizeDTO.getCode());
@@ -72,8 +77,8 @@ public class GitHubServiceImpl implements GitHubService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         RedisUtils.set(RedisKey.getKey(RedisKey.GITHUB_LOGIN_INFO, uuid),
                         JsonUtils.toStr(hubUserDTO),
-                        30L,
-                        TimeUnit.MINUTES);
+                3L,
+                TimeUnit.DAYS);
         return uuid;
     }
 
@@ -90,5 +95,14 @@ public class GitHubServiceImpl implements GitHubService {
                 .code(code)
                 .client_id(gitHubAuthProperties.getClientId())
                 .client_secret(gitHubAuthProperties.getClientSecret()).build();
+    }
+
+    @Override
+    public String loginWithGitHub(String code) {
+        GitHubUserDTO userDTO = RedisUtils.get(code, GitHubUserDTO.class);
+        User user = userService.getUserInfoByGitHubId(userDTO.getId());
+        AssertUtil.isNotEmpty(user, "请绑定用户");
+        // 登录
+        return loginService.login(user.getId());
     }
 }

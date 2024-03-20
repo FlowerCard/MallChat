@@ -68,4 +68,12 @@ public interface UserService {
     List<SummeryInfoDTO> getSummeryUserInfo(SummeryInfoReq req);
 
     List<ItemInfoDTO> getItemInfo(ItemInfoReq req);
+
+    /**
+     * 根据 GitHub ID 获取用户信息
+     *
+     * @param gitHubId GitHub ID
+     * @return 用户信息
+     */
+    User getUserInfoByGitHubId(Long gitHubId);
 }
