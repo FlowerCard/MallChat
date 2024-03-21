@@ -77,6 +77,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserInfo(String username) {
+        return userDao.selectUserByUsername(username);
+    }
+
+    @Override
     @Transactional
     public void modifyName(Long uid, ModifyNameReq req) {
         //判断名字是不是重复

@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.abin.mallchat.common.common.domain.enums.YesOrNoEnum;
+import com.abin.mallchat.common.common.domain.vo.response.UserDetailVo;
 import com.abin.mallchat.common.user.domain.entity.ItemConfig;
 import com.abin.mallchat.common.user.domain.entity.User;
 import com.abin.mallchat.common.user.domain.entity.UserBackpack;
@@ -77,5 +78,18 @@ public class UserAdapter {
         }).sorted(Comparator.comparing(BadgeResp::getWearing, Comparator.reverseOrder())
                 .thenComparing(BadgeResp::getObtain, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 构建用户详情
+     *
+     * @param user 用户信息
+     * @return 用户详情
+     */
+    public static UserDetailVo buildUserDetailVo(User user) {
+        UserDetailVo detailVo = new UserDetailVo();
+        detailVo.setId(user.getId());
+        detailVo.setUsername(user.getName());
+        return detailVo;
     }
 }

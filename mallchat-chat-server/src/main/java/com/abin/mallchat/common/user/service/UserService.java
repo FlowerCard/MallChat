@@ -28,6 +28,14 @@ public interface UserService {
     UserInfoResp getUserInfo(Long uid);
 
     /**
+     * 获取用户信息
+     *
+     * @param username 用户名
+     * @return 用户信息
+     */
+    User getUserInfo(String username);
+
+    /**
      * 修改用户名
      *
      * @param uid

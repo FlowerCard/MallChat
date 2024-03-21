@@ -95,4 +95,16 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
     public User getByGitHubId(Long gitHubId) {
         return this.lambdaQuery().eq(User::getGithubId, gitHubId).one();
     }
+
+    /**
+     * 通过用户名获取用户信息
+     *
+     * @param username 用户名
+     * @return 用户信息
+     */
+    public User selectUserByUsername(String username) {
+        return this.lambdaQuery()
+                .eq(User::getName, username)
+                .one();
+    }
 }
