@@ -40,7 +40,7 @@ public class GitHubController {
     public String getGitHubAuthorizeUrl() {
         String authorizeUrl = gitHubAuthProperties.getAuthorizeUrl();
         String redirectUrl = authorizeUrl.concat("?client_id=").concat(gitHubAuthProperties.getClientId())
-                .concat("&state=").concat(UUID.fastUUID().toString().replace("-", "")).toString();
+                .concat("&state=").concat(UUID.fastUUID().toString().replace("-", ""));
         log.info("redirectUrl -> {}", redirectUrl);
         return redirectUrl;
     }
