@@ -29,6 +29,7 @@ import com.abin.mallchat.common.user.service.cache.UserSummaryCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +66,8 @@ public class UserServiceImpl implements UserService {
     private UserSummaryCache userSummaryCache;
     @Autowired
     private SensitiveWordBs sensitiveWordBs;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserInfoResp getUserInfo(Long uid) {
@@ -119,10 +122,20 @@ public class UserServiceImpl implements UserService {
         userCache.userInfoChange(uid);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void register(User user) {
         userDao.save(user);
         applicationEventPublisher.publishEvent(new UserRegisterEvent(this, user));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Boolean register(UserRegisterReq user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User userEntity = UserAdapter.buildUser(user);
+        this.register(userEntity);
+        return Boolean.TRUE;
     }
 
     @Override

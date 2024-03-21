@@ -84,5 +84,17 @@ public class UserController {
         userService.black(req);
         return ApiResult.success();
     }
+
+    /**
+     * 用户注册
+     *
+     * @param user 用户注册信息
+     * @return 是否成功
+     */
+    @ApiOperation("用户注册")
+    @PostMapping("/public/register")
+    public ApiResult<Boolean> userRegister(@Valid @RequestBody UserRegisterReq user) {
+        return ApiResult.success(userService.register(user));
+    }
 }
 

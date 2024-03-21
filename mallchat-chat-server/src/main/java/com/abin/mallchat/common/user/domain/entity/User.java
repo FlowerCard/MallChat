@@ -62,6 +62,12 @@ public class User implements Serializable {
     private String openId;
 
     /**
+     * 密码
+     */
+    @TableField("password")
+    private String password;
+
+    /**
      * 上下线状态 1在线 2离线
      */
     @TableField("active_status")

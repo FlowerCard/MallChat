@@ -57,6 +57,15 @@ public interface UserService {
      */
     void register(User user);
 
+    /**
+     * 用户名注册<br>
+     * 手动注册
+     *
+     * @param user 用户注册信息
+     * @return 是否成功
+     */
+    Boolean register(UserRegisterReq user);
+
     void black(BlackReq req);
 
     /**

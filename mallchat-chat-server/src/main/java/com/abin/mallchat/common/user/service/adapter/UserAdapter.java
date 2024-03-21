@@ -7,6 +7,7 @@ import com.abin.mallchat.common.common.domain.enums.YesOrNoEnum;
 import com.abin.mallchat.common.user.domain.entity.ItemConfig;
 import com.abin.mallchat.common.user.domain.entity.User;
 import com.abin.mallchat.common.user.domain.entity.UserBackpack;
+import com.abin.mallchat.common.user.domain.vo.request.user.UserRegisterReq;
 import com.abin.mallchat.common.user.domain.vo.response.user.BadgeResp;
 import com.abin.mallchat.common.user.domain.vo.response.user.UserInfoResp;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,13 @@ public class UserAdapter {
     public static User buildUser(String openId) {
         User user = new User();
         user.setOpenId(openId);
+        return user;
+    }
+
+    public static User buildUser(UserRegisterReq userRegister) {
+        User user = new User();
+        user.setName(userRegister.getUsername());
+        user.setPassword(userRegister.getPassword());
         return user;
     }
 
