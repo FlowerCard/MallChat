@@ -6,7 +6,6 @@ import com.abin.mallchat.common.common.domain.properties.GitHubAuthProperties;
 import com.abin.mallchat.common.common.domain.vo.response.ApiResult;
 import com.abin.mallchat.common.user.service.GitHubService;
 import com.abin.mallchat.utils.JsonUtils;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +22,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController
-@RequestMapping("/github/public")
+@RequestMapping("/github")
 public class GitHubController {
 
     @Resource
@@ -35,14 +34,13 @@ public class GitHubController {
     /**
      * 获取GitHub授权登录地址
      */
-    @SneakyThrows
-    @GetMapping("/authorize")
-    public String getGitHubAuthorizeUrl() {
+    @GetMapping("/public/authorize")
+    public ApiResult<String> getGitHubAuthorizeUrl() {
         String authorizeUrl = gitHubAuthProperties.getAuthorizeUrl();
         String redirectUrl = authorizeUrl.concat("?client_id=").concat(gitHubAuthProperties.getClientId())
                 .concat("&state=").concat(UUID.fastUUID().toString().replace("-", ""));
         log.info("redirectUrl -> {}", redirectUrl);
-        return redirectUrl;
+        return ApiResult.success(redirectUrl);
     }
 
     /**
@@ -50,7 +48,7 @@ public class GitHubController {
      * @param authorizeDTO 授权DTO
      * @return 结果code
      */
-    @RequestMapping("/callBack")
+    @RequestMapping("/public/callBack")
     public ApiResult<String> accessGithubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
         log.info("authorizeDTO -> {}", JsonUtils.toStr(authorizeDTO));
         return ApiResult.success(gitHubService.githubLoginInfo(authorizeDTO));
