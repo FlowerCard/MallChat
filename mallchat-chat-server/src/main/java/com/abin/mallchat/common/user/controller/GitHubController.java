@@ -9,7 +9,6 @@ import com.abin.mallchat.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -34,7 +33,7 @@ public class GitHubController {
     /**
      * 获取GitHub授权登录地址
      */
-    @GetMapping("/public/authorize")
+    @GetMapping("/authorize/public")
     public ApiResult<String> getGitHubAuthorizeUrl() {
         String authorizeUrl = gitHubAuthProperties.getAuthorizeUrl();
         String redirectUrl = authorizeUrl.concat("?client_id=").concat(gitHubAuthProperties.getClientId())
@@ -44,24 +43,14 @@ public class GitHubController {
     }
 
     /**
-     * GitHub授权登录回调
-     * @param authorizeDTO 授权DTO
-     * @return 结果code
-     */
-    @RequestMapping("/public/callBack")
-    public ApiResult<String> accessGithubLogin(GitHubLoginAuthorizeDTO authorizeDTO) {
-        log.info("authorizeDTO -> {}", JsonUtils.toStr(authorizeDTO));
-        return ApiResult.success(gitHubService.githubLoginInfo(authorizeDTO));
-    }
-
-    /**
      * 通过GitHub登录
      *
      * @return token
      */
-    @GetMapping("/loginWithGitHub")
-    public ApiResult<String> loginWithGitHub(@RequestParam("code") String code) {
-        return ApiResult.success(gitHubService.loginWithGitHub(code));
+    @RequestMapping("/authorize/public/loginWithGitHub")
+    public ApiResult<String> loginWithGitHub(GitHubLoginAuthorizeDTO authorizeDTO) {
+        log.info("authorizeDTO -> {}", JsonUtils.toStr(authorizeDTO));
+        return ApiResult.success(gitHubService.loginWithGitHub(authorizeDTO));
     }
 
 }

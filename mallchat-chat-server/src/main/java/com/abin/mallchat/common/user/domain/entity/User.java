@@ -101,7 +101,7 @@ public class User implements Serializable {
      * github主页地址
      */
     @TableField(value = "github_html_url")
-    private Long githubHtmlUrl;
+    private String githubHtmlUrl;
 
     /**
      * GitHub授权信息

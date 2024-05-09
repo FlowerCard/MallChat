@@ -11,19 +11,12 @@ import com.abin.mallchat.common.common.domain.dto.GitHubLoginAuthorizeDTO;
 public interface GitHubService {
 
     /**
-     * GitHub登录信息
-     *
-     * @param authorizeDTO 认证信息
-     * @return 登录信息code
-     */
-    String githubLoginInfo(GitHubLoginAuthorizeDTO authorizeDTO);
-
-    /**
      * 通过GitHub登录
      *
-     * @param code 登录信息code
+     * @param authorizeDTO 认证信息
      * @return token
      */
-    String loginWithGitHub(String code);
+    String loginWithGitHub(GitHubLoginAuthorizeDTO authorizeDTO);
+
 
 }
